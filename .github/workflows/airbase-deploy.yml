@@ -10,7 +10,10 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Airbase Build
-        run: airbase container build
+        shell: bash
+        run: |
+          echo "${{ secrets.AIRBASE_RC }}" > ~/.airbaserc
+          airbase container build
       - name: Airbase Deploy
         shell: bash
         run: |
@@ -20,6 +23,4 @@ jobs:
           airbase container deploy --output deploy.env --yes
           source deploy.env
 
-          # airbase container deploy --output deploy.env --yes --project "${{ vars.AIRBASE_PROJECT_HANDLE }}"
-          # source deploy.env
           echo "App is deployed successfully! Visit [$DYNAMIC_ENVIRONMENT_URL]($DYNAMIC_ENVIRONMENT_URL) to view your app." >> $GITHUB_STEP_SUMMARY
