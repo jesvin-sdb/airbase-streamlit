@@ -11,9 +11,13 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Install Airbase CLI
+        shell: bash
         run: |
-          curl -fsSL https://console.airbase.tech.gov.sg/dist/install.sh | sh
+          curl -fsSL https://console.airbase.tech.gov.sg/dist/install.sh -o install.sh
+          sh install.sh
           echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Verify CLI installed
+        run: airbase --version
       - name: Airbase Deploy
         shell: bash
         run: |
