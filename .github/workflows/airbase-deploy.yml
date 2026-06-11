@@ -13,6 +13,7 @@ jobs:
       - name: Install Airbase CLI
         shell: bash
         run: |
+          mkdir -p $HOME/.local/bin
           curl -fsSL https://console.airbase.tech.gov.sg/dist/install.sh -o install.sh
           sh install.sh
           echo "$HOME/.local/bin" >> $GITHUB_PATH
