@@ -6,18 +6,17 @@ jobs:
     if: github.ref_name == github.event.repository.default_branch
     container:
       image: gdssingapore/airbase:cli
+    env:
+      AIRBASE_ACCESS_KEY_ID: ${{ secrets.AIRBASE_ACCESS_KEY_ID }}
+      AIRBASE_SECRET_ACCESS_KEY: ${{ secrets.AIRBASE_SECRET_ACCESS_KEY }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Airbase Build
-        shell: bash
-        run: |
-          echo "${{ secrets.AIRBASE_RC }}" > ~/.airbaserc
-          airbase container build
+        run: airbase container build
       - name: Airbase Deploy
         shell: bash
         run: |
-          echo "${{ secrets.AIRBASE_RC }}" > ~/.airbaserc
           echo "${{ secrets.AIRBASE_ENV_LOCAL_FILE }}" > .env.local
 
           airbase container deploy --output deploy.env --yes
