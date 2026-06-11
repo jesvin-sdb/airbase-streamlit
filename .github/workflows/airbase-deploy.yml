@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-     - name: Install Airbase CLI
+      - name: Install Airbase CLI
         shell: bash
         run: |
           mkdir -p $HOME/.local/bin
