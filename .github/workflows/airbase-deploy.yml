@@ -4,9 +4,6 @@ jobs:
   Airbase-Deploy:
     runs-on: ubuntu-24.04
     if: github.ref_name == github.event.repository.default_branch
-    env:
-      AIRBASE_ACCESS_KEY_ID: ${{ secrets.AIRBASE_ACCESS_KEY_ID }}
-      AIRBASE_SECRET_ACCESS_KEY: ${{ secrets.AIRBASE_SECRET_ACCESS_KEY }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -23,7 +20,8 @@ jobs:
       - name: Airbase Deploy
         shell: bash
         run: |
-          echo "${{ secrets.AIRBASE_RC }}" > ~/.airbaserc
+          airbase login --ci-key "${{ secrets.AIRBASE_SECRET_ACCESS_KEY }}" \
+            || airbase login --ci-key "${{ secrets.AIRBASE_ACCESS_KEY_ID }}:${{ secrets.AIRBASE_SECRET_ACCESS_KEY }}"
           echo "${{ secrets.AIRBASE_ENV_LOCAL_FILE }}" > .env.local
           airbase deploy --yes
           echo "Deploy finished — check the log above for your app URL." >> $GITHUB_STEP_SUMMARY
