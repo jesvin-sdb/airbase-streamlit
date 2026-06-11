@@ -10,12 +10,15 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-      - name: Install Airbase CLI
+     - name: Install Airbase CLI
         shell: bash
         run: |
           mkdir -p $HOME/.local/bin
-          curl -fsSL https://console.airbase.tech.gov.sg/dist/install.sh -o install.sh
-          sh install.sh
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors \
+            -A "Mozilla/5.0 (X11; Linux x86_64)" \
+            https://console.airbase.tech.gov.sg/dist/v1.1.1/airbase-linux-amd64 \
+            -o $HOME/.local/bin/airbase
+          chmod +x $HOME/.local/bin/airbase
           echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: Verify CLI installed
         run: airbase --version
