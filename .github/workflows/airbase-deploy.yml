@@ -23,6 +23,7 @@ jobs:
       - name: Airbase Deploy
         shell: bash
         run: |
+          echo "${{ secrets.AIRBASE_RC }}" > ~/.airbaserc
           echo "${{ secrets.AIRBASE_ENV_LOCAL_FILE }}" > .env.local
           airbase deploy --yes
           echo "Deploy finished — check the log above for your app URL." >> $GITHUB_STEP_SUMMARY
