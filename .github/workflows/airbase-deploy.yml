@@ -11,7 +11,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Airbase Login
         shell: bash
-        run: echo "${{ secrets.AIRBASE_RC }}" > ~/.airbaserc
+        run: |
+          printf '%s\n' "${{ secrets.AIRBASE_RC }}" | tr -d '\r' > ~/.airbaserc
+          wc -c ~/.airbaserc
       - name: Airbase Build
         run: airbase container build
       - name: Airbase Deploy
