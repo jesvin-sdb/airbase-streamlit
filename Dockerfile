@@ -1,9 +1,8 @@
-FROM gdssingapore/airbase:python-3.13
-ENV PYTHONUNBUFFERED=TRUE
-COPY --chown=app:app requirements.txt ./
-RUN pip install -r requirements.txt
-COPY --chown=app:app . ./
+FROM gdssingapore/airbase:node-20
+WORKDIR /app
+RUN npm install -g serve
+COPY --chown=app:app index.html ./
 USER app
-CMD ["bash", "-c", "streamlit run main.py --server.port=$PORT"]
-
-# comment here for deploy again
+ENV PORT=3000
+EXPOSE 3000
+CMD ["serve", "-s", ".", "-l", "3000"]
