@@ -1,6 +1,6 @@
 {
   "framework": "container",
-  "handle": "sdb-jesvin/career-coach",
-  "port": 8501,
+  "handle": "sdb-jesvin/coachly",
+  "port": 3000,
   "instanceType": "nano"
 }
