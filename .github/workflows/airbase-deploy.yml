@@ -4,25 +4,20 @@ jobs:
   Airbase-Deploy:
     runs-on: ubuntu-24.04
     if: github.ref_name == github.event.repository.default_branch
+    container:
+      image: gdssingapore/airbase:cli
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-      - name: Install Airbase CLI
-        shell: bash
-        run: |
-          mkdir -p $HOME/.local/bin
-          curl -fsSL https://github.com/jesvin-sdb/airbase-streamlit/releases/download/cli-v1.1.1/airbase-linux-amd64 \
-            -o $HOME/.local/bin/airbase
-          chmod +x $HOME/.local/bin/airbase
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-      - name: Verify CLI installed
-        run: airbase --version
+      - name: Airbase Build
+        run: airbase container build
       - name: Airbase Deploy
         shell: bash
-        env:
-          AIRBASE_ACCESS_KEY_ID: ${{ secrets.AIRBASE_ACCESS_KEY_ID }}
-          AIRBASE_SECRET_ACCESS_KEY: ${{ secrets.AIRBASE_SECRET_ACCESS_KEY }}
         run: |
+          echo "${{ secrets.AIRBASE_RC }}" > ~/.airbaserc
           echo "${{ secrets.AIRBASE_ENV_LOCAL_FILE }}" > .env.local
-          airbase deploy --yes
-          echo "Deploy finished — check the log above for your app URL." >> $GITHUB_STEP_SUMMARY
+
+          airbase container deploy --output deploy.env --yes
+          source deploy.env
+
+          echo "App is deployed successfully! Visit [$DYNAMIC_ENVIRONMENT_URL]($DYNAMIC_ENVIRONMENT_URL) to view your app." >> $GITHUB_STEP_SUMMARY
